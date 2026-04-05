@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memoria — Final Design Summary</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: #0f172a; color: #e2e8f0; padding: 32px; }
+h1 { font-size: 20px; font-weight: 700; color: white; margin-bottom: 4px; }
+.sub { font-size: 13px; color: #64748b; margin-bottom: 28px; }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.full { grid-column: 1 / -1; }
+
+.card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+.card-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  margin-bottom: 12px;
+}
+
+.token-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.swatch { width: 28px; height: 28px; border-radius: 6px; flex-shrink: 0; }
+.token-name { font-size: 13px; font-weight: 600; color: #f1f5f9; }
+.token-hex { font-size: 11px; color: #64748b; font-family: monospace; }
+
+.stack-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #334155; }
+.stack-item:last-child { border-bottom: none; }
+.stack-key { font-size: 13px; color: #94a3b8; }
+.stack-val { font-size: 13px; font-weight: 600; color: #f1f5f9; }
+
+.page-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+.page-row:last-child { border-bottom: none; }
+.pill { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 99px; flex-shrink: 0; }
+.pill-pub { background: rgba(99,102,241,0.2); color: #a5b4fc; }
+.pill-prot { background: rgba(16,185,129,0.2); color: #6ee7b7; }
+.pill-sess { background: rgba(245,158,11,0.2); color: #fcd34d; }
+.page-name { font-weight: 600; color: #f1f5f9; flex: 1; }
+.page-desc { color: #64748b; font-size: 12px; }
+
+.feature-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #334155; font-size: 13px; }
+.feature-item:last-child { border-bottom: none; }
+.check { color: #38bdf8; flex-shrink: 0; }
+.feature-text { color: #cbd5e1; }
+.feature-text strong { color: #f1f5f9; }
+</style>
+</head>
+<body>
+
+<h1>Memoria — Final Design</h1>
+<p class="sub">All decisions locked in. Ready to write the spec.</p>
+
+<div class="grid">
+
+  <!-- Stack -->
+  <div class="card">
+    <div class="card-title">Tech Stack</div>
+    <div class="stack-item"><span class="stack-key">Framework</span><span class="stack-val">Next.js (App Router)</span></div>
+    <div class="stack-item"><span class="stack-key">Architecture</span><span class="stack-val">Hybrid SSR + Client</span></div>
+    <div class="stack-item"><span class="stack-key">Database</span><span class="stack-val">Supabase (PostgreSQL)</span></div>
+    <div class="stack-item"><span class="stack-key">Auth</span><span class="stack-val">Supabase Auth — Google + Email</span></div>
+    <div class="stack-item"><span class="stack-key">Storage</span><span class="stack-val">Supabase Storage (images)</span></div>
+    <div class="stack-item"><span class="stack-key">UI Library</span><span class="stack-val">Mantine v7</span></div>
+    <div class="stack-item"><span class="stack-key">Font</span><span class="stack-val">Inter</span></div>
+  </div>
+
+  <!-- Colors -->
+  <div class="card">
+    <div class="card-title">Color Tokens</div>
+    <div class="token-row"><div class="swatch" style="background:#1e293b;border:1px solid #334155"></div><div><div class="token-name">Sidebar</div><div class="token-hex">#1e293b — Dark Navy</div></div></div>
+    <div class="token-row"><div class="swatch" style="background:#0ea5e9"></div><div><div class="token-name">Primary</div><div class="token-hex">#0ea5e9 — Sky Blue</div></div></div>
+    <div class="token-row"><div class="swatch" style="background:#f1f5f9"></div><div><div class="token-name">Background</div><div class="token-hex">#f1f5f9 — Cool Gray</div></div></div>
+    <div class="token-row"><div class="swatch" style="background:#ffffff;border:1px solid #e2e8f0"></div><div><div class="token-name">Surface</div><div class="token-hex">#ffffff — White cards</div></div></div>
+    <div class="token-row"><div class="swatch" style="background:#059669"></div><div><div class="token-name">Success</div><div class="token-hex">#059669 — Memorized/correct</div></div></div>
+    <div class="token-row"><div class="swatch" style="background:#dc2626"></div><div><div class="token-name">Danger</div><div class="token-hex">#dc2626 — Missed/error</div></div></div>
+  </div>
+
+  <!-- Pages -->
+  <div class="card full">
+    <div class="card-title">Pages</div>
+    <div class="page-row"><span class="pill pill-pub">PUBLIC</span><span class="page-name">/</span><span class="page-desc">Landing — title, subtitle, Get started CTA. Redirects if logged in.</span></div>
+    <div class="page-row"><span class="pill pill-pub">PUBLIC</span><span class="page-name">/login &nbsp; /signup</span><span class="page-desc">Google OAuth button + email/password form.</span></div>
+    <div class="page-row"><span class="pill pill-prot">PROTECTED</span><span class="page-name">/dashboard</span><span class="page-desc">Overview stats: questions, memorized, topics, sessions this week.</span></div>
+    <div class="page-row"><span class="pill pill-prot">PROTECTED</span><span class="page-name">/questions</span><span class="page-desc">List with search + topic filter. CRUD. Streak badge + memorized indicator.</span></div>
+    <div class="page-row"><span class="pill pill-prot">PROTECTED</span><span class="page-name">/topics</span><span class="page-desc">List topics. CRUD. Shows question count per topic.</span></div>
+    <div class="page-row"><span class="pill pill-prot">PROTECTED</span><span class="page-name">/sessions</span><span class="page-desc">Configure new session (topics + count + include memorized). Session history below.</span></div>
+    <div class="page-row"><span class="pill pill-sess">SESSION</span><span class="page-name">/sessions/[id]</span><span class="page-desc">Full-screen study mode. No sidebar. Keyboard shortcuts. Completion screen.</span></div>
+  </div>
+
+  <!-- Key features -->
+  <div class="card full">
+    <div class="card-title">Key Features</div>
+    <div class="feature-item"><span class="check">✓</span><span class="feature-text"><strong>Flashcard content:</strong> Each side has text (required) + optional image. Images stored in Supabase Storage.</span></div>
+    <div class="feature-item"><span class="check">✓</span><span class="feature-text"><strong>Streak scoring:</strong> Correct answer → streak +1. Wrong → streak resets to 0. Streak ≥ 10 → marked memorized.</span></div>
+    <div class="feature-item"><span class="check">✓</span><span class="feature-text"><strong>Weighted selection:</strong> Weight = 1/(streak+1). Low streak questions are prioritized in session sampling.</span></div>
+    <div class="feature-item"><span class="check">✓</span><span class="feature-text"><strong>Memorized exclusion:</strong> Memorized questions excluded by default. Toggle to include when configuring a session.</span></div>
+    <div class="feature-item"><span class="check">✓</span><span class="feature-text"><strong>Session re-queue:</strong> Wrong answers are re-added to end of queue. Session ends only when all questions are answered correctly.</span></div>
+    <div class="feature-item"><span class="check">✓</span><span class="feature-text"><strong>Keyboard shortcuts:</strong> Space → reveal answer. ← Missed it. → Got it.</span></div>
+    <div class="feature-item"><span class="check">✓</span><span class="feature-text"><strong>Dark/light mode:</strong> System-aware via Mantine ColorScheme.</span></div>
+    <div class="feature-item"><span class="check">✓</span><span class="feature-text"><strong>Auth:</strong> Google OAuth + email/password via Supabase Auth. Server-side route protection via Next.js middleware.</span></div>
+  </div>
+
+</div>
+
+</body>
+</html>

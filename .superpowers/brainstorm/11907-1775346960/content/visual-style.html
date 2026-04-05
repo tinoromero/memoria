@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memoria — Visual Style</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color: #1e293b; }
+
+  .page { display: flex; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 220px;
+    background: white;
+    border-right: 1px solid #e2e8f0;
+    padding: 24px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .sidebar-logo {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+    padding: 8px 12px 20px;
+    letter-spacing: -0.02em;
+  }
+  .sidebar-logo span { color: #2563eb; }
+  .sidebar-section {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #94a3b8;
+    padding: 8px 12px 4px;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .nav-item:hover { background: #f1f5f9; color: #1e293b; }
+  .nav-item.active { background: #eff6ff; color: #2563eb; font-weight: 600; }
+  .nav-icon { width: 16px; height: 16px; opacity: 0.7; }
+  .nav-item.active .nav-icon { opacity: 1; }
+  .sidebar-bottom { margin-top: auto; border-top: 1px solid #e2e8f0; padding-top: 12px; }
+
+  /* Main content */
+  .main { flex: 1; padding: 32px 40px; overflow-y: auto; }
+  .page-header { margin-bottom: 28px; }
+  .page-title { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 4px; }
+  .page-subtitle { font-size: 14px; color: #64748b; }
+
+  /* Stats row */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+  .stat-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+  .stat-label { font-size: 12px; color: #94a3b8; font-weight: 500; margin-bottom: 6px; }
+  .stat-value { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; color: #1e293b; }
+  .stat-value.blue { color: #2563eb; }
+  .stat-value.green { color: #059669; }
+  .stat-value.purple { color: #7c3aed; }
+
+  /* Table */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .section-title { font-size: 15px; font-weight: 600; }
+  .btn-primary {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-secondary {
+    background: white;
+    color: #1e293b;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .table-wrap {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .table-toolbar {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .search-input {
+    flex: 1;
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
+    padding: 7px 12px;
+    font-size: 13px;
+    font-family: inherit;
+    color: #1e293b;
+    background: #f8fafc;
+    outline: none;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th {
+    text-align: left;
+    padding: 10px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #94a3b8;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f8fafc;
+  }
+  td { padding: 12px 16px; border-bottom: 1px solid #f1f5f9; color: #374151; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8fafc; }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .badge-topic { background: #eff6ff; color: #2563eb; }
+  .badge-memorized { background: #f0fdf4; color: #059669; }
+  .streak {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #f59e0b;
+  }
+  .action-btn {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  .action-btn:hover { background: #f1f5f9; color: #1e293b; }
+
+  /* Bottom label */
+  .style-label {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    background: #1e293b;
+    color: white;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    gap: 16px;
+  }
+  .style-label span { opacity: 0.6; }
+  .style-label strong { opacity: 1; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">memo<span>ria</span></div>
+    <div class="sidebar-section">Main</div>
+    <div class="nav-item active">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg>
+      Overview
+    </div>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4h12M2 8h12M2 12h8"/></svg>
+      Questions
+    </div>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h12v2a4 4 0 01-4 4H6a4 4 0 01-4-4V3z"/><path d="M5.5 9v4M10.5 9v4M3 13h10"/></svg>
+      Topics
+    </div>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/></svg>
+      Sessions
+    </div>
+    <div class="sidebar-bottom">
+      <div class="sidebar-section">Account</div>
+      <div class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.314 2.686-5 6-5s6 1.686 6 5"/></svg>
+        Profile
+      </div>
+      <div class="nav-item" style="color: #ef4444;">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="#ef4444" stroke-width="1.8"><path d="M10 2h3a1 1 0 011 1v10a1 1 0 01-1 1h-3M7 11l3-3-3-3M10 8H2"/></svg>
+        Logout
+      </div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="page-header">
+      <div class="page-title">Overview</div>
+      <div class="page-subtitle">Welcome back — here's how your study is going.</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total Questions</div>
+        <div class="stat-value blue">142</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Memorized</div>
+        <div class="stat-value green">38</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Topics</div>
+        <div class="stat-value">7</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Sessions this week</div>
+        <div class="stat-value purple">5</div>
+      </div>
+    </div>
+
+    <!-- Recent Questions preview -->
+    <div class="section-header">
+      <div class="section-title">Recent Questions</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-secondary">Filter</button>
+        <button class="btn-primary">+ Add questions</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <div class="table-toolbar">
+        <input class="search-input" placeholder="Search questions…" value="">
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Question</th>
+            <th>Topic</th>
+            <th>Streak</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>What is the powerhouse of the cell?</td>
+            <td><span class="badge badge-topic">Biology</span></td>
+            <td><span class="streak">🔥 10</span></td>
+            <td><span class="badge badge-memorized">Memorized</span></td>
+            <td><button class="action-btn">⋯</button></td>
+          </tr>
+          <tr>
+            <td>What does HTTP stand for?</td>
+            <td><span class="badge badge-topic">Tech</span></td>
+            <td><span class="streak">🔥 6</span></td>
+            <td></td>
+            <td><button class="action-btn">⋯</button></td>
+          </tr>
+          <tr>
+            <td>Who painted the Sistine Chapel?</td>
+            <td><span class="badge badge-topic">Art History</span></td>
+            <td><span class="streak" style="color:#94a3b8">— 0</span></td>
+            <td></td>
+            <td><button class="action-btn">⋯</button></td>
+          </tr>
+          <tr>
+            <td>What is the speed of light?</td>
+            <td><span class="badge badge-topic">Physics</span></td>
+            <td><span class="streak">🔥 4</span></td>
+            <td></td>
+            <td><button class="action-btn">⋯</button></td>
+          </tr>
+          <tr>
+            <td>What year did WWII end?</td>
+            <td><span class="badge badge-topic">History</span></td>
+            <td><span class="streak">🔥 8</span></td>
+            <td></td>
+            <td><button class="action-btn">⋯</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="style-label">
+  <span>Font:</span> <strong>Plus Jakarta Sans</strong>
+  <span>Primary:</span> <strong>#2563EB</strong>
+  <span>Mode:</span> <strong>Light</strong>
+</div>
+
+<script>
+// Inject the helper script for selection events if available
+</script>
+</body>
+</html>

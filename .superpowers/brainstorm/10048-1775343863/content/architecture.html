@@ -1,0 +1,82 @@
+<h2>Which architecture approach fits best?</h2>
+<p class="subtitle">All options use Next.js App Router + Mantine + Supabase. The difference is how data flows.</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Full Server-First (Server Components + Server Actions)</h3>
+      <p>All data fetching happens in Server Components. Mutations use Server Actions. Supabase runs entirely on the server. Mantine UI components are wrapped in <code>"use client"</code> boundaries only where needed.</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>Pros</h4>
+          <ul>
+            <li>Most secure — Supabase keys never exposed to browser</li>
+            <li>Best performance — data arrives with the HTML</li>
+            <li>No loading spinners for initial page load</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>Cons</h4>
+          <ul>
+            <li>Complex mental model — "use client" boundary management</li>
+            <li>Mantine requires careful client/server split</li>
+            <li>Harder to implement real-time interactivity</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Hybrid — SSR for pages, client for interactions ⭐ Recommended</h3>
+      <p>Server Components fetch initial data (questions list, session config). Client Components handle interactive UI (study session, forms). Uses <code>@supabase/ssr</code> for both server and client Supabase instances.</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>Pros</h4>
+          <ul>
+            <li>Best of both worlds — fast initial loads + smooth interactions</li>
+            <li>Supabase's officially recommended pattern for Next.js</li>
+            <li>Mantine works naturally on the client side</li>
+            <li>Auth handled server-side (protected routes are secure)</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>Cons</h4>
+          <ul>
+            <li>Need to manage two Supabase client instances (server + browser)</li>
+            <li>Slightly more setup upfront</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Client-Side SPA style</h3>
+      <p>Most pages are Client Components using Supabase JS directly, similar to how the previous project used Apollo Client. Auth is handled via Supabase's auth state on the client.</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>Pros</h4>
+          <ul>
+            <li>Simplest mental model — closest to the previous project's pattern</li>
+            <li>Mantine works everywhere without configuration</li>
+            <li>Fastest to build</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>Cons</h4>
+          <ul>
+            <li>No SSR benefits — pages load blank then fill in</li>
+            <li>Auth checking happens client-side (brief flash before redirect)</li>
+            <li>Wastes Next.js's main strengths</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

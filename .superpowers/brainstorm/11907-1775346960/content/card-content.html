@@ -1,0 +1,80 @@
+<h2>How should question & answer content be structured?</h2>
+<p class="subtitle">Each "side" of a flashcard can carry different types of content. Pick the model that fits best.</p>
+
+<div class="options">
+
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Text only, OR Image only</h3>
+      <p>Each side is either a text field or an image — not both. The user picks one mode per side.</p>
+      <div style="display: flex; gap: 12px; margin-top: 10px;">
+        <div style="flex: 1; background: #f8fafc; border-radius: 8px; padding: 10px; font-size: 12px; text-align: center; border: 1px solid #e2e8f0;">
+          <div style="font-weight: 600; margin-bottom: 4px;">Card front</div>
+          <div style="color: #64748b;">text <em>or</em> image</div>
+        </div>
+        <div style="flex: 1; background: #f8fafc; border-radius: 8px; padding: 10px; font-size: 12px; text-align: center; border: 1px solid #e2e8f0;">
+          <div style="font-weight: 600; margin-bottom: 4px;">Card back</div>
+          <div style="color: #64748b;">text <em>or</em> image</div>
+        </div>
+      </div>
+      <div class="pros-cons" style="margin-top: 10px;">
+        <div class="pros"><h4>Pros</h4><ul><li>Simplest model</li><li>Clean UI — one or the other</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Can't combine text + image on same side</li><li>Less expressive</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Text (required) + Image (optional) ⭐ Recommended</h3>
+      <p>Each side always has a text field. An image can optionally accompany it. At least the text must be filled.</p>
+      <div style="display: flex; gap: 12px; margin-top: 10px;">
+        <div style="flex: 1; background: #f8fafc; border-radius: 8px; padding: 10px; font-size: 12px; border: 1px solid #e2e8f0;">
+          <div style="font-weight: 600; margin-bottom: 6px; text-align: center;">Card front</div>
+          <div style="background: white; border: 1px solid #e2e8f0; border-radius: 5px; padding: 4px 8px; margin-bottom: 4px; font-size: 11px; color: #64748b;">question text ✱ required</div>
+          <div style="background: white; border: 1px dashed #cbd5e1; border-radius: 5px; padding: 4px 8px; font-size: 11px; color: #94a3b8;">+ image (optional)</div>
+        </div>
+        <div style="flex: 1; background: #f8fafc; border-radius: 8px; padding: 10px; font-size: 12px; border: 1px solid #e2e8f0;">
+          <div style="font-weight: 600; margin-bottom: 6px; text-align: center;">Card back</div>
+          <div style="background: white; border: 1px solid #e2e8f0; border-radius: 5px; padding: 4px 8px; margin-bottom: 4px; font-size: 11px; color: #64748b;">answer text ✱ required</div>
+          <div style="background: white; border: 1px dashed #cbd5e1; border-radius: 5px; padding: 4px 8px; font-size: 11px; color: #94a3b8;">+ image (optional)</div>
+        </div>
+      </div>
+      <div class="pros-cons" style="margin-top: 10px;">
+        <div class="pros"><h4>Pros</h4><ul><li>Text always available for search, lists, previews</li><li>Images enrich without replacing text</li><li>Simple validation — just require the text</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Can't have image-only cards (e.g. "identify this diagram")</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Text (optional) + Image (optional) — at least one required</h3>
+      <p>Maximum flexibility. Each side can be text only, image only, or both. Validation just requires at least one to be filled.</p>
+      <div style="display: flex; gap: 12px; margin-top: 10px;">
+        <div style="flex: 1; background: #f8fafc; border-radius: 8px; padding: 10px; font-size: 12px; border: 1px solid #e2e8f0;">
+          <div style="font-weight: 600; margin-bottom: 6px; text-align: center;">Card front</div>
+          <div style="background: white; border: 1px dashed #cbd5e1; border-radius: 5px; padding: 4px 8px; margin-bottom: 4px; font-size: 11px; color: #94a3b8;">text (optional)</div>
+          <div style="background: white; border: 1px dashed #cbd5e1; border-radius: 5px; padding: 4px 8px; font-size: 11px; color: #94a3b8;">image (optional)</div>
+          <div style="font-size: 10px; color: #f59e0b; margin-top: 4px;">✱ at least one required</div>
+        </div>
+        <div style="flex: 1; background: #f8fafc; border-radius: 8px; padding: 10px; font-size: 12px; border: 1px solid #e2e8f0;">
+          <div style="font-weight: 600; margin-bottom: 6px; text-align: center;">Card back</div>
+          <div style="background: white; border: 1px dashed #cbd5e1; border-radius: 5px; padding: 4px 8px; margin-bottom: 4px; font-size: 11px; color: #94a3b8;">text (optional)</div>
+          <div style="background: white; border: 1px dashed #cbd5e1; border-radius: 5px; padding: 4px 8px; font-size: 11px; color: #94a3b8;">image (optional)</div>
+          <div style="font-size: 10px; color: #f59e0b; margin-top: 4px;">✱ at least one required</div>
+        </div>
+      </div>
+      <div class="pros-cons" style="margin-top: 10px;">
+        <div class="pros"><h4>Pros</h4><ul><li>Fully flexible — image-only cards supported</li><li>Covers all use cases</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Image-only cards have no text for search or list previews</li><li>Slightly more complex validation</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<p style="margin-top: 16px; font-size: 13px; color: var(--text-muted);">Images will be stored in <strong>Supabase Storage</strong> (private bucket, per-user folder). The DB stores the image path, not a public URL.</p>
