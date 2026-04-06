@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Box, Button, Image, Text, Stack, ActionIcon } from '@mantine/core'
 import { IconUpload, IconX } from '@tabler/icons-react'
 import { createClient } from '@/lib/supabase/client'
@@ -16,6 +16,17 @@ export default function ImageUpload({ label, value, onChange, userId }: Props) {
   const supabase = createClient()
   const [uploading, setUploading] = useState(false)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (value && !previewUrl) {
+      supabase.storage.from('card-images').createSignedUrl(value, 3600).then(({ data }) => {
+        if (data) setPreviewUrl(data.signedUrl)
+      })
+    }
+    if (!value) {
+      setPreviewUrl(null)
+    }
+  }, [value])
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]

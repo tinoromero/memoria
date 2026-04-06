@@ -1,6 +1,6 @@
 // components/sessions/StudySession.tsx
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { Box, Card, Text, Button, Group, Progress, Stack, Center, Title } from '@mantine/core'
 import { useRouter } from 'next/navigation'
 import { notifications } from '@mantine/notifications'
@@ -88,9 +88,12 @@ export default function StudySession({ sessionId, initialSessionQuestions }: Pro
     return () => window.removeEventListener('keydown', handleKey)
   }, [handleReveal, handleGrade])
 
+  const committedRef = useRef(false)
+
   // Commit results on completion
   useEffect(() => {
-    if (!isComplete || phase !== 'complete') return
+    if (!isComplete || phase !== 'complete' || committedRef.current) return
+    committedRef.current = true
 
     async function commitResults() {
       // Update session_questions results (first answers only)
@@ -130,7 +133,7 @@ export default function StudySession({ sessionId, initialSessionQuestions }: Pro
     commitResults().catch(() =>
       notifications.show({ message: 'Failed to save session results.', color: 'red' })
     )
-  }, [isComplete, phase])
+  }, [isComplete, phase, firstAnswers, currentQueue, initialSessionQuestions, sessionId])
 
   // Stats for completion screen
   const correctCount = Object.values(firstAnswers).filter(r => r === 'correct').length
