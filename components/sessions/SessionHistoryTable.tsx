@@ -1,5 +1,6 @@
 // components/sessions/SessionHistoryTable.tsx
-import { Table, Badge, Text, Group } from '@mantine/core'
+'use client'
+import { Table, Badge, Text } from '@mantine/core'
 import type { SessionWithStats } from '@/lib/types'
 
 interface Props { sessions: SessionWithStats[] }
