@@ -1,4 +1,5 @@
 // app/page.tsx
+'use client'
 import { Center, Stack, Title, Text, Button, Group } from '@mantine/core'
 import Link from 'next/link'
 
