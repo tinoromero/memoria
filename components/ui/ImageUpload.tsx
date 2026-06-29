@@ -32,6 +32,12 @@ export default function ImageUpload({ label, value, onChange, userId }: Props) {
     const file = e.target.files?.[0]
     if (!file) return
 
+    const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      notifications.show({ message: 'Only JPEG, PNG, GIF, and WebP images are allowed.', color: 'red' })
+      return
+    }
+
     setUploading(true)
     const ext = file.name.split('.').pop()
     const path = `${userId}/${Date.now()}.${ext}`
