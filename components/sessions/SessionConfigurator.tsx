@@ -1,7 +1,7 @@
 // components/sessions/SessionConfigurator.tsx
 'use client'
 import { useState } from 'react'
-import { Card, Title, Stack, MultiSelect, NumberInput, Switch, Button, Text } from '@mantine/core'
+import { Card, Title, Stack, MultiSelect, NumberInput, Switch, Button } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useRouter } from 'next/navigation'
 import { notifications } from '@mantine/notifications'

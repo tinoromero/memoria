@@ -41,7 +41,7 @@ export default async function DashboardPage() {
     <Stack gap="lg">
       <div>
         <Title order={2} fw={700}>Overview</Title>
-        <Text c="dimmed" size="sm">Welcome back — here's how your study is going.</Text>
+        <Text c="dimmed" size="sm">Welcome back — here&apos;s how your study is going.</Text>
       </div>
       <SimpleGrid cols={4} spacing="md">
         <StatCard label="Total Questions" value={totalQuestions ?? 0} icon={<IconCards size={20} />} color="sky" />

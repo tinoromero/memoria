@@ -1,4 +1,5 @@
 // app/(protected)/questions/page.tsx
+import { redirect } from 'next/navigation'
 import { Title, Text, Stack } from '@mantine/core'
 import { createClient } from '@/lib/supabase/server'
 import QuestionTable from '@/components/questions/QuestionTable'
@@ -8,6 +9,7 @@ export default async function QuestionsPage() {
   const supabase = await createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
 
   const [{ data: questions }, { data: topics }] = await Promise.all([
     supabase.from('questions').select('*, topic:topics(id, name)').order('created_at', { ascending: false }),
@@ -23,7 +25,7 @@ export default async function QuestionsPage() {
       <QuestionTable
         initialQuestions={(questions ?? []) as QuestionWithTopic[]}
         topics={topics ?? []}
-        userId={user!.id}
+        userId={user.id}
       />
     </Stack>
   )

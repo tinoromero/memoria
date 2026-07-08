@@ -1,6 +1,5 @@
 // components/questions/QuestionFormModal.tsx
 'use client'
-import { useEffect } from 'react'
 import { Modal, Textarea, Select, Stack, Button, Divider } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
@@ -34,16 +33,6 @@ export default function QuestionFormModal({ opened, onClose, onSaved, topics, qu
       answer: v => (v.trim().length >= 1 ? null : 'Answer is required'),
     },
   })
-
-  useEffect(() => {
-    form.setValues({
-      question: question?.question ?? '',
-      question_image_path: question?.question_image_path ?? null,
-      answer: question?.answer ?? '',
-      answer_image_path: question?.answer_image_path ?? null,
-      topic_id: question?.topic_id ?? null,
-    })
-  }, [question?.id])
 
   async function handleSubmit(values: typeof form.values) {
     const payload = {

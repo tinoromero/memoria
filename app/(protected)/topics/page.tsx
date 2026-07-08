@@ -10,10 +10,10 @@ export default async function TopicsPage() {
     .select('*, question_count:questions(count)')
     .order('created_at', { ascending: false })
 
-  const topicsWithCount = (topics ?? []).map(t => ({
-    ...t,
-    question_count: (t.question_count as any)[0]?.count ?? 0,
-  }))
+  const topicsWithCount = (topics ?? []).map(t => {
+    const { question_count, ...topic } = t as typeof t & { question_count: { count: number }[] }
+    return { ...topic, question_count: question_count[0]?.count ?? 0 }
+  })
 
   return (
     <Stack gap="lg">

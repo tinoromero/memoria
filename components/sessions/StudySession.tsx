@@ -5,10 +5,10 @@ import { Box, Card, Text, Button, Group, Progress, Stack, Center, Title } from '
 import { useRouter } from 'next/navigation'
 import { notifications } from '@mantine/notifications'
 import { createClient } from '@/lib/supabase/client'
-import { computeStreakUpdates } from '@/lib/session-logic'
+import { MEMORIZED_THRESHOLD } from '@/lib/session-logic'
 import type { Question, SessionQuestion } from '@/lib/types'
 
-interface SessionQuestionWithQuestion extends SessionQuestion {
+export interface SessionQuestionWithQuestion extends SessionQuestion {
   question: Question & { topic: { name: string } | null }
 }
 
@@ -26,7 +26,7 @@ interface QueueItem {
 type Phase = 'question' | 'answer' | 'complete'
 
 export default function StudySession({ sessionId, initialSessionQuestions }: Props) {
-  const supabase = createClient()
+  const [supabase] = useState(createClient)
   const router = useRouter()
 
   // Build initial queue
@@ -96,51 +96,34 @@ export default function StudySession({ sessionId, initialSessionQuestions }: Pro
     committedRef.current = true
 
     async function commitResults() {
-      // Update session_questions results (first answers only)
-      const updates = Object.entries(firstAnswers).map(([sqId, result]) =>
-        supabase.from('session_questions').update({
-          result,
-          was_retried: currentQueue.some(item => item.sqId === sqId && item.isRetry),
-        }).eq('id', sqId)
-      )
-      await Promise.all(updates)
-
-      // Map sqId → questionId for streak computation
-      const sqToQuestionId: Record<string, string> = {}
-      const questionStreaks: Record<string, number> = {}
-      initialSessionQuestions.forEach(sq => {
-        sqToQuestionId[sq.id] = sq.question_id
-        questionStreaks[sq.question_id] = sq.question.streak
-      })
-
-      const sessionResults = Object.entries(firstAnswers).map(([sqId, result]) => ({
-        questionId: sqToQuestionId[sqId],
+      // One transactional RPC persists answers, recomputes streaks and marks the
+      // session complete — see supabase/migrations/003_complete_session_rpc.sql.
+      const answers = Object.entries(firstAnswers).map(([sqId, result]) => ({
+        session_question_id: sqId,
         result,
+        was_retried: currentQueue.some(item => item.sqId === sqId && item.isRetry),
       }))
 
-      const streakUpdates = computeStreakUpdates(sessionResults, questionStreaks)
-
-      await Promise.all(
-        streakUpdates.map(({ questionId, newStreak, isMemorized }) =>
-          supabase.from('questions').update({ streak: newStreak, is_memorized: isMemorized }).eq('id', questionId)
-        )
-      )
-
-      // Mark session as completed
-      await supabase.from('sessions').update({ completed_at: new Date().toISOString() }).eq('id', sessionId)
+      const { error } = await supabase.rpc('complete_session', {
+        p_session_id: sessionId,
+        p_answers: answers,
+      })
+      if (error) throw error
     }
 
-    commitResults().catch(() =>
+    commitResults().catch(() => {
+      // Allow a retry if the user leaves and re-enters the (still-incomplete) session
+      committedRef.current = false
       notifications.show({ message: 'Failed to save session results.', color: 'red' })
-    )
-  }, [isComplete, phase, firstAnswers, currentQueue, initialSessionQuestions, sessionId])
+    })
+  }, [isComplete, phase, firstAnswers, currentQueue, initialSessionQuestions, sessionId, supabase])
 
   // Stats for completion screen
   const correctCount = Object.values(firstAnswers).filter(r => r === 'correct').length
   const wrongCount = Object.values(firstAnswers).filter(r => r === 'wrong').length
   const newlyMemorized = initialSessionQuestions.filter(sq => {
     const firstAnswer = firstAnswers[sq.id]
-    return firstAnswer === 'correct' && sq.question.streak + 1 >= 10
+    return firstAnswer === 'correct' && sq.question.streak + 1 >= MEMORIZED_THRESHOLD
   }).length
 
   if (phase === 'complete') {

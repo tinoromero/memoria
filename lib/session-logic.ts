@@ -1,5 +1,8 @@
 // lib/session-logic.ts
 
+/** A question becomes "memorized" once its streak reaches this value. */
+export const MEMORIZED_THRESHOLD = 10
+
 export interface SampleableQuestion {
   id: string
   streak: number
@@ -62,7 +65,7 @@ export function computeStreakUpdates(
     return {
       questionId,
       newStreak,
-      isMemorized: newStreak >= 10,
+      isMemorized: newStreak >= MEMORIZED_THRESHOLD,
     }
   })
 }

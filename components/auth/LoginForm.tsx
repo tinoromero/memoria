@@ -18,7 +18,7 @@ export default function LoginForm() {
     initialValues: { email: '', password: '' },
     validate: {
       email: v => (/^\S+@\S+$/.test(v) ? null : 'Invalid email'),
-      password: v => (v.length >= 6 ? null : 'Password must be at least 6 characters'),
+      password: v => (v.length >= 1 ? null : 'Password is required'),
     },
   })
 

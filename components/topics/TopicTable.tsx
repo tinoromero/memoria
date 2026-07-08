@@ -25,7 +25,10 @@ export default function TopicTable({ initialTopics }: Props) {
       .from('topics')
       .select('*, question_count:questions(count)')
       .order('created_at', { ascending: false })
-    if (data) setTopics(data.map(t => ({ ...t, question_count: (t.question_count as any)[0]?.count ?? 0 })))
+    if (data) setTopics(data.map(t => {
+      const { question_count, ...topic } = t as typeof t & { question_count: { count: number }[] }
+      return { ...topic, question_count: question_count[0]?.count ?? 0 }
+    }))
   }
 
   function handleEdit(topic: Topic) {
@@ -36,7 +39,7 @@ export default function TopicTable({ initialTopics }: Props) {
   function handleDelete(topic: Topic) {
     modals.openConfirmModal({
       title: 'Delete topic',
-      children: <Text size="sm">Delete "{topic.name}"? Questions in this topic will become unassigned.</Text>,
+      children: <Text size="sm">Delete &quot;{topic.name}&quot;? Questions in this topic will become unassigned.</Text>,
       labels: { confirm: 'Delete', cancel: 'Cancel' },
       confirmProps: { color: 'red' },
       onConfirm: async () => {
@@ -75,8 +78,8 @@ export default function TopicTable({ initialTopics }: Props) {
                   <Table.Td><Badge variant="light">{topic.question_count}</Badge></Table.Td>
                   <Table.Td>
                     <Group gap={4} justify="flex-end">
-                      <ActionIcon variant="subtle" onClick={() => handleEdit(topic)}><IconEdit size={16} /></ActionIcon>
-                      <ActionIcon variant="subtle" color="red" onClick={() => handleDelete(topic)}><IconTrash size={16} /></ActionIcon>
+                      <ActionIcon variant="subtle" aria-label={`Edit ${topic.name}`} onClick={() => handleEdit(topic)}><IconEdit size={16} /></ActionIcon>
+                      <ActionIcon variant="subtle" color="red" aria-label={`Delete ${topic.name}`} onClick={() => handleDelete(topic)}><IconTrash size={16} /></ActionIcon>
                     </Group>
                   </Table.Td>
                 </Table.Tr>
@@ -87,6 +90,7 @@ export default function TopicTable({ initialTopics }: Props) {
       </Stack>
 
       <TopicFormModal
+        key={editing?.id ?? 'new'}
         opened={opened}
         onClose={close}
         onSaved={refresh}

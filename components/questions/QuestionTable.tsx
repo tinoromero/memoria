@@ -118,8 +118,8 @@ export default function QuestionTable({ initialQuestions, topics, userId }: Prop
                   </Table.Td>
                   <Table.Td>
                     <Group gap={4} justify="flex-end">
-                      <ActionIcon variant="subtle" onClick={() => handleEdit(q)}><IconEdit size={16} /></ActionIcon>
-                      <ActionIcon variant="subtle" color="red" onClick={() => handleDelete(q)}><IconTrash size={16} /></ActionIcon>
+                      <ActionIcon variant="subtle" aria-label="Edit question" onClick={() => handleEdit(q)}><IconEdit size={16} /></ActionIcon>
+                      <ActionIcon variant="subtle" color="red" aria-label="Delete question" onClick={() => handleDelete(q)}><IconTrash size={16} /></ActionIcon>
                     </Group>
                   </Table.Td>
                 </Table.Tr>
@@ -130,6 +130,7 @@ export default function QuestionTable({ initialQuestions, topics, userId }: Prop
       </Stack>
 
       <QuestionFormModal
+        key={editing?.id ?? 'new'}
         opened={opened}
         onClose={close}
         onSaved={refresh}

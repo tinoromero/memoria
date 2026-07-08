@@ -13,20 +13,20 @@ interface Props {
 }
 
 export default function ImageUpload({ label, value, onChange, userId }: Props) {
-  const supabase = createClient()
+  const [supabase] = useState(createClient)
   const [uploading, setUploading] = useState(false)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
+  // Load a preview for an already-stored image. Clearing is handled by the
+  // remove handler and by the parent remounting this field per question.
   useEffect(() => {
-    if (value && !previewUrl) {
-      supabase.storage.from('card-images').createSignedUrl(value, 3600).then(({ data }) => {
-        if (data) setPreviewUrl(data.signedUrl)
-      })
-    }
-    if (!value) {
-      setPreviewUrl(null)
-    }
-  }, [value])
+    if (!value) return
+    let active = true
+    supabase.storage.from('card-images').createSignedUrl(value, 3600).then(({ data }) => {
+      if (active && data) setPreviewUrl(data.signedUrl)
+    })
+    return () => { active = false }
+  }, [value, supabase])
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
